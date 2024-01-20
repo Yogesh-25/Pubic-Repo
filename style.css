@@ -348,14 +348,11 @@ a:visited {
     /* Prev, Next, Oldest, Newest buttons */
     #prevNextButtons {
         flex-direction: row;
-        /* align-items: stretch; */
     }
 
     #prevNextButtons button {
         margin-left: 0rem;
         padding: 0.25rem;
-        /* width: 10%; */
-
     }
 
     .butInfo {

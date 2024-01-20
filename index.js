@@ -1,215 +1,173 @@
-
-const token = "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";
 let currentIndex = 0;
 const usersPerPage = 1; // no of users to display per page
-let users = []; //  GitHub users
+let users = [];
 
-// GitHub API endpoint to get GitHub users with public repositories
-const usersApiUrl =
-    "https://api.github.com/users?per_page=1000&type=public";
+// GitHub API endpoint
+// to get GitHub users with public repositories
+const usersApiUrl = "https://api.github.com/users?per_page=1000&type=public";
+const userApiUrl = "https://api.github.com/users/";  //to get user details
+const repoApiUrl = "https://api.github.com/users/{username}/repos?type=public";  //public repositories for a user
 
-// GitHub API endpoint to get user details
-const userApiUrl = "https://api.github.com/users/";
-
-// GitHub API endpoint to get public repositories for a user
-const repoApiUrl =
-    "https://api.github.com/users/{username}/repos?type=public";
-
-// Fetch GitHub users with public repositories using the API
-fetch(usersApiUrl, {
-    headers: {
-        Authorization: `Bearer ${token}`,
-    },
-})
-    .then((response) => response.json())
-    .then((data) => {
+// Fetch and display user details and public repositories
+async function fetchAndDisplay() {
+    const user = users[currentIndex];
+    await fetchUserDetails(user.login);
+    await fetchPublicRepos(user.login);
+}
+// Fetch GitHub users and display
+async function fetchUsers() {
+    try {
+        const response = await fetch(usersApiUrl);
+        const data = await response.json();
         users = data;
         updatePageNumbers();
         fetchAndDisplay();
-    })
-    .catch((error) => console.error("Error fetching GitHub users:", error));
+    } catch (error) {
+        console.error("Error fetching GitHub users:", error);
+    }
+}
 
 // Fetch user details using the GitHub API
-function fetchUserDetails(username) {
-    fetch(`${userApiUrl}${username}`, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-        .then((response) => response.json())
-        .then((user) => {
-            const userInfoContainer = document.getElementById("userInfo");
-            const avatar = document.getElementById("avatar");
-            const userInfoDetails = document.getElementById("userInfoDetails");
-            const githubUrl = document.getElementById("githubUrl");
+async function fetchUserDetails(username) {
+    try {
+        const response = await fetch(`${userApiUrl}${username}`);
+        const user = await response.json();
 
-            // Set the avatar image source
-            avatar.src = user.avatar_url;
-            avatar.alt = `Avatar of ${user.login}`;
+        const userInfoContainer = document.getElementById("userInfo");
+        const avatar = document.getElementById("avatar");
+        const userInfoDetails = document.getElementById("userInfoDetails");
+        const githubUrl = document.getElementById("githubUrl");
 
-            githubUrl.href = user.html_url;
-            githubUrl.textContent = user.html_url;
+        // Set the avatar image source
+        avatar.src = user.avatar_url;
+        avatar.alt = `Avatar of ${user.login}`;
 
-            userInfoDetails.innerHTML = "";
+        // Set GitHub profile URL
+        githubUrl.href = user.html_url;
+        githubUrl.textContent = user.html_url;
 
-            const nameElement = document.createElement("h1");
-            nameElement.textContent = ` ${user.name || "N/A"}`;
+        // Clear previous user details
+        userInfoDetails.innerHTML = "";
 
-            const locationElement = document.createElement("p");
-            const locationIcon = document.createElement("i");
-            locationIcon.className = "fas fa-map-marker-alt";
-            locationElement.appendChild(locationIcon);
+        // Create and append user details to the DOM
+        const nameElement = document.createElement("h1");
+        nameElement.textContent = ` ${user.name || "N/A"}`;
 
-            // Check if the location is available
-            if (user.location && user.location !== "N/A") {
-                const locationLink = document.createElement("a");
-                locationLink.href = `https://maps.google.com/?q=${encodeURIComponent(
-                    user.location
-                )}`;
-                locationLink.target = "_blank";
-                locationLink.textContent = ` ${user.location}`;
-                locationElement.appendChild(locationLink);
+        const locationElement = document.createElement("p");
+        const locationIcon = document.createElement("i");
+        locationIcon.className = "fas fa-map-marker-alt";
+        locationElement.appendChild(locationIcon);
 
-                // map icon clickable
-                locationIcon.style.cursor = "pointer";
-                locationIcon.addEventListener("click", () =>
-                    window.open(locationLink.href, "_blank")
-                );
-            } else {
-                locationElement.innerHTML += " N/A";
-            }
+        // Check if the location is available
+        if (user.location && user.location !== "N/A") {
+            const locationLink = document.createElement("a");
+            locationLink.href = `https://maps.google.com/?q=${encodeURIComponent(
+                user.location
+            )}`;
+            locationLink.target = "_blank";
+            locationLink.textContent = ` ${user.location}`;
+            locationElement.appendChild(locationLink);
 
-            const twitterElement = document.createElement("p");
-            twitterElement.innerHTML = `Twitter: ${user.twitter_username
-                ? `<a href="https://twitter.com/${user.twitter_username}" target="_blank">https://twitter.com/${user.twitter_username}</a>`
-                : "N/A"
-                }`;
+            //map icon clickable
+            locationIcon.style.cursor = "pointer";
+            locationIcon.addEventListener("click", () =>
+                window.open(locationLink.href, "_blank")
+            );
+        } else {
+            locationElement.innerHTML += " N/A";
+        }
 
-            const followersElement = document.createElement("p");
-            followersElement.textContent = `Followers: ${user.followers || 0}`;
+        // Create and append additional user details
+        const twitterElement = document.createElement("p");
+        twitterElement.innerHTML = `Twitter: ${user.twitter_username
+            ? `<a href="https://twitter.com/${user.twitter_username}" target="_blank">https://twitter.com/${user.twitter_username}</a>`
+            : "N/A"
+            }`;
 
-            const publicReposElement = document.createElement("p");
-            publicReposElement.textContent = `Public Repositories: ${user.public_repos || 0
-                }`;
+        const followersElement = document.createElement("p");
+        followersElement.textContent = `Followers: ${user.followers || 0}`;
 
-            userInfoDetails.appendChild(nameElement);
-            userInfoDetails.appendChild(locationElement);
-            userInfoDetails.appendChild(followersElement);
-            userInfoDetails.appendChild(publicReposElement);
-            userInfoDetails.appendChild(twitterElement);
-        })
-        .catch((error) =>
-            console.error("Error fetching user details:", error)
-        );
+        const publicReposElement = document.createElement("p");
+        publicReposElement.textContent = `Public Repositories: ${user.public_repos || 0
+            }`;
+
+        userInfoDetails.appendChild(nameElement);
+        userInfoDetails.appendChild(locationElement);
+        userInfoDetails.appendChild(followersElement);
+        userInfoDetails.appendChild(publicReposElement);
+        userInfoDetails.appendChild(twitterElement);
+
+    } catch (error) {
+        console.error("Error fetching user details:", error);
+    }
 }
 
 // Fetch public repositories using the GitHub API
-function fetchPublicRepos(username) {
-    fetch(repoApiUrl.replace("{username}", username), {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-        .then((response) => response.json())
-        .then((repositories) => {
-            const repoList = document.getElementById("repoList");
-            repoList.innerHTML = "";
+async function fetchPublicRepos(username) {
+    try {
+        const response = await fetch(repoApiUrl.replace("{username}", username));
+        const repositories = await response.json();
 
-            repositories.forEach((repo) => {
-                const listItem = document.createElement("li");
-                listItem.className = "repo-item";
+        // Display public repositories in the DOM
+        const repoList = document.getElementById("repoList");
+        repoList.innerHTML = "";
 
-                // Repository name as a clickable link
-                const repoLink = document.createElement("a");
-                repoLink.href = repo.html_url;
-                repoLink.textContent = repo.name;
-                repoLink.target = "_blank";
+        repositories.forEach((repo) => {
+            const listItem = document.createElement("li");
+            listItem.className = "repo-item";
 
-                // Repository description
-                const repoDescription = document.createElement("p");
-                repoDescription.textContent =
-                    repo.description || "No description available.";
+            // Repository name as a clickable link
+            const repoLink = document.createElement("a");
+            repoLink.href = repo.html_url;
+            repoLink.textContent = repo.name;
+            repoLink.target = "_blank";
 
-                // Group repo name and button in a div
-                const repoDetailsContainer = document.createElement("div");
-                repoDetailsContainer.appendChild(repoLink);
+            // Repository description
+            const repoDescription = document.createElement("p");
+            repoDescription.textContent =
+                repo.description || "No description available.";
 
-                listItem.appendChild(repoDetailsContainer);
-                listItem.appendChild(repoDescription);
+            // Group repo name and button in a div
+            const repoDetailsContainer = document.createElement("div");
+            repoDetailsContainer.appendChild(repoLink);
 
-                // Fetch and display the languages used in each repository
-                fetchLanguages(repo, listItem);
+            listItem.appendChild(repoDetailsContainer);
+            listItem.appendChild(repoDescription);
 
-                repoList.appendChild(listItem);
-            });
-        })
-        .catch((error) =>
-            console.error("Error fetching public repositories:", error)
-        );
-}
+            // Fetch and display the languages used in each repository
+            fetchLanguages(repo, listItem);
 
-// fetch and display the languages used in a repository
-function fetchLanguages(repo, listItem) {
-    const languagesApiUrl = `https://api.github.com/repos/${repo.full_name}/languages`;
+            repoList.appendChild(listItem);
+        });
 
-    fetch(languagesApiUrl, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    })
-        .then((response) => response.json())
-        .then((languages) => {
-            const languagesList = document.createElement("div");
-            languagesList.className = "languages-list";
-
-            for (const language in languages) {
-                const languageItem = document.createElement("span");
-                languageItem.className = "language-item";
-                languageItem.textContent = language;
-                languagesList.appendChild(languageItem);
-            }
-
-            listItem.appendChild(languagesList);
-        })
-        .catch((error) =>
-            console.error("Error fetching languages for the repository:", error)
-        );
-}
-
-//open the GitHub repository in a new tab
-function openRepoInNewTab(repoUrl) {
-    window.open(repoUrl, "_blank");
-}
-
-// Fetch and display user details and public repositories
-function fetchAndDisplay() {
-    const user = users[currentIndex];
-    fetchUserDetails(user.login);
-    fetchPublicRepos(user.login);
-}
-
-// Update user index and fetch/display details for the previous user
-function prevUser() {
-    if (currentIndex > 0) {
-        currentIndex -= usersPerPage;
-        fetchAndDisplay();
-        updatePageNumbers();
+    } catch (error) {
+        console.error("Error fetching public repositories:", error);
     }
 }
 
-// Update user index and fetch/display details for the next user
-function nextUser() {
-    const totalPages = Math.ceil(users.length / usersPerPage);
-    const lastPageIndex = totalPages - 1;
+// Fetch and display the languages used in a repository
+async function fetchLanguages(repo, listItem) {
+    try {
+        const languagesApiUrl = `https://api.github.com/repos/${repo.full_name}/languages`;
+        const response = await fetch(languagesApiUrl);
+        const languages = await response.json();
 
-    if (currentIndex < lastPageIndex * usersPerPage) {
-        currentIndex += usersPerPage;
-    } else {
-        currentIndex++;
+        // Display languages in the DOM
+        const languagesList = document.createElement("div");
+        languagesList.className = "languages-list";
+
+        for (const language in languages) {
+            const languageItem = document.createElement("span");
+            languageItem.className = "language-item";
+            languageItem.textContent = language;
+            languagesList.appendChild(languageItem);
+        }
+
+        listItem.appendChild(languagesList);
+
+    } catch (error) {
+        console.error("Error fetching languages for the repository:", error);
     }
-
-    fetchAndDisplay();
-    updatePageNumbers();
 }
 
 // Update page numbers with scrolling effect
@@ -233,7 +191,6 @@ function updatePageNumbers() {
         if (i === currentPage) {
             pageNumberElement.classList.add("current-page");
         }
-
         pageNumberElement.addEventListener("click", () => goToPage(i - 1));
         pageNumbersContainer.appendChild(pageNumberElement);
     }
@@ -250,5 +207,28 @@ function goToPage(pageIndex) {
     updatePageNumbers();
 }
 
+// Display details for the previous user
+function prevUser() {
+    if (currentIndex > 0) {
+        currentIndex -= usersPerPage;
+        fetchAndDisplay();
+        updatePageNumbers();
+    }
+}
+
+// Display details for the next user
+function nextUser() {
+    const totalPages = Math.ceil(users.length / usersPerPage);
+    const lastPageIndex = totalPages - 1;
+
+    if (currentIndex < lastPageIndex * usersPerPage) {
+        currentIndex += usersPerPage;
+    } else {
+        currentIndex++;
+    }
+    fetchAndDisplay();
+    updatePageNumbers();
+}
+
 // Initial fetch and display
-fetchAndDisplay();
+fetchUsers();
