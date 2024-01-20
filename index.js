@@ -1,6 +1,7 @@
 let currentIndex = 0;
 const usersPerPage = 1; // no of users to display per page
 let users = [];
+const token = "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";
 
 // GitHub API endpoint
 // to get GitHub users with public repositories
@@ -11,14 +12,28 @@ const repoApiUrl = "https://api.github.com/users/{username}/repos?type=public"; 
 // Fetch and display user details and public repositories
 async function fetchAndDisplay() {
     const user = users[currentIndex];
-    await fetchUserDetails(user.login);
-    await fetchPublicRepos(user.login);
+
+    // Add a check to ensure 'user' is defined before proceeding
+    if (user) {
+        await fetchUserDetails(user.login);
+        await fetchPublicRepos(user.login);
+    } else {
+        console.error("User object is undefined at index:", currentIndex);
+    }
 }
 // Fetch GitHub users and display
 async function fetchUsers() {
     try {
-        const response = await fetch(usersApiUrl);
+        const response = await fetch(usersApiUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         const data = await response.json();
+
+        // Log the data to inspect its structure
+        console.log("GitHub API response:", data);
+
         users = data;
         updatePageNumbers();
         fetchAndDisplay();
@@ -30,7 +45,11 @@ async function fetchUsers() {
 // Fetch user details using the GitHub API
 async function fetchUserDetails(username) {
     try {
-        const response = await fetch(`${userApiUrl}${username}`);
+        const response = await fetch(`${userApiUrl}${username}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         const user = await response.json();
 
         const userInfoContainer = document.getElementById("userInfo");
@@ -105,7 +124,11 @@ async function fetchUserDetails(username) {
 // Fetch public repositories using the GitHub API
 async function fetchPublicRepos(username) {
     try {
-        const response = await fetch(repoApiUrl.replace("{username}", username));
+        const response = await fetch(repoApiUrl.replace("{username}", username), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         const repositories = await response.json();
 
         // Display public repositories in the DOM
@@ -149,7 +172,11 @@ async function fetchPublicRepos(username) {
 async function fetchLanguages(repo, listItem) {
     try {
         const languagesApiUrl = `https://api.github.com/repos/${repo.full_name}/languages`;
-        const response = await fetch(languagesApiUrl);
+        const response = await fetch(languagesApiUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
         const languages = await response.json();
 
         // Display languages in the DOM
