@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <script type="text/javascript" src="./index.js"></script>
+
+    <title>Public Repositories</title>
+  </head>
+  <body>
+    <div id="pageContainer">
+      <div id="content">
+        <div id="userInfo">
+          <img id="avatar" src="" alt="User Avatar" />
+
+          <div class="git-i">
+            <i class="fas fa-link"></i
+            ><a id="githubUrl" class="github-url" target="_blank" href=""></a>
+          </div>
+        </div>
+        <div id="userInfoDetails"></div>
+      </div>
+
+      <h2>Public GitHub Repositories</h2>
+      <ul id="repoList"></ul>
+
+      <div id="sidebar">
+        <ul id="userList"></ul>
+      </div>
+
+      <div id="prevNextButtons">
+        <button onclick="prevUser()"><<</button>
+        <div class="page-numbers-container" id="pageNumbers"></div>
+        <button onclick="nextUser()">>></button>
+      </div>
+
+      <div class="butInfo">
+        <button onclick="prevUser()">&#8592; oldest</button>
+        <button onclick="nextUser()">newest &#8594;</button>
+      </div>
+    </div>
+  </body>
+</html>

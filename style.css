@@ -1,0 +1,434 @@
+body {
+    display: flex;
+    flex-direction: row;
+    margin: 2;
+    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
+}
+
+a,
+a.location-link {
+    text-decoration: none;
+}
+
+a:visited {
+    color: #8a8a8a;
+
+}
+
+#pageContainer {
+    border: 2px solid #000000;
+    padding: 1.25rem;
+    border-radius: 0.625rem;
+    width: 80%;
+    max-width: 75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    width: 100%;
+    background-color: #ffff;
+}
+
+#userInfo {
+    background-color: #ffff;
+    padding: 0.9375rem;
+    border-radius: 0.3125rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Repo details*/
+#repoList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#repoList li {
+    width: calc(50% - 1.25rem);
+    /* Two repos per row with some gap */
+    padding: 1.25rem;
+    border: 1px solid #000000;
+    border-radius: 0.3125rem;
+    margin-bottom: 1.25rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    font-size: 1rem;
+}
+
+#repoList h3 {
+    margin: 0;
+
+}
+
+#repoList div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.repo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    list-style: none;
+    margin-bottom: 1.25rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.repo-item:hover {
+    transform: scale(1.05);
+}
+
+.repo-item a {
+    color: #4772bb;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.repo-item a:hover {
+    color: #ea5b92;
+}
+
+.repo-item p {
+    color: #586069;
+    font-size: 1rem;
+    margin: 0;
+    margin-top: 0.625rem;
+}
+
+/*Language of repo project*/
+.languages-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3125rem;
+    margin-top: 0.875rem;
+}
+
+.language-item {
+    background-color: #3c78b9;
+    color: white;
+    padding: 0.3125rem 0.625rem;
+    border-radius: 0.1875rem;
+    font-size: 0.75rem;
+}
+
+#userList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#userList li {
+    margin-bottom: 0.625rem;
+}
+
+#userList button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.625rem 0.9375rem;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+
+    font-size: 0.875rem;
+    border-radius: 0.1875rem;
+    cursor: pointer;
+}
+
+#userList button:hover {
+    background-color: #0056b3;
+}
+
+/*previos, next button paging*/
+#prevNextButtons {
+    text-align: center;
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#prevNextButtons button {
+    margin: 0px;
+    padding: 0.50rem 0.75rem;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.32rem;
+}
+
+#prevNextButtons button:hover {
+    background-color: #f2f2f2;
+}
+
+.page-numbers-container {
+    display: flex;
+}
+
+.page-number {
+    margin: 0px;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    color: #007bff;
+    border: 1px solid #ddd;
+    border-radius: 0.32rem;
+}
+
+.page-number:hover {
+    background-color: #f2f2f2;
+}
+
+.current-page {
+    background-color: #007bff;
+    color: white;
+}
+
+/*oldest newest */
+.butInfo {
+    display: flex;
+    text-align: left;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.butInfo button {
+    border: 1px solid #ddd;
+    background-color: white;
+    font-size: 1.1rem;
+    border-radius: 2.1875rem;
+    padding: 0.50rem 0.75rem;
+    text-align: center;
+    margin-top: 0.625rem;
+    cursor: pointer;
+
+
+}
+
+.butInfo button:hover {
+    background-color: #e7d2d2;
+}
+
+.butInfo button:first-child {
+    margin-right: 5.5rem;
+    color: #8b8a8a;
+}
+
+.butInfo button:last-child {
+    margin-left: 5.5rem;
+    color: #007bff;
+}
+
+/*user profile */
+#userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    text-align: left;
+    margin-bottom: 1.25rem;
+}
+
+#avatar {
+    width: 18.75rem;
+    height: 18.75rem;
+    border-radius: 50%;
+    margin-right: 1.25rem;
+}
+
+#userInfoDetails {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin-top: 2rem;
+}
+
+.git-i {
+    color: #0366d6;
+    text-decoration: none;
+    font-size: 1rem;
+    margin-top: 0.8rem;
+    text-align: center;
+    transition: color 0.3s ease-in-out;
+}
+
+.git-i:hover {
+    text-decoration: underline;
+    color: #004080;
+}
+
+@media only screen and (min-width: 760.5rem) {
+    body {
+        flex-direction: row;
+    }
+
+    #pageContainer {
+        flex-direction: row;
+    }
+
+    #content {
+        flex-direction: row;
+    }
+
+    #repoList li {
+        width: calc(50% - 1.25rem);
+    }
+
+    #content {
+        flex-direction: row;
+    }
+
+    #userInfo {
+        width: 40%;
+        /* Adjust width for larger screens */
+        margin-right: 1.25rem;
+        /* Add margin for spacing */
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    #content {
+        flex-direction: column;
+        /* Change back to column for smaller screens */
+    }
+
+    #userInfo {
+        /* width: 100%; */
+        /* Take full width on smaller screens */
+        margin-right: 0;
+        align-items: center;
+        justify-content: center;
+        /* Remove margin on smaller screens */
+    }
+
+    #userInfoDetails {
+        margin-top: -1rem;
+    }
+
+    #avatar {
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        margin-left: 0.5rem;
+
+        /* margin-right: 0.5rem; */
+    }
+
+    #repoList li {
+        width: 100%;
+    }
+
+    /* Page numbers */
+    .page-numbers-container {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .page-number {
+        margin: 0px;
+        padding: 0.25rem;
+    }
+
+    /* Prev, Next, Oldest, Newest buttons */
+    #prevNextButtons {
+        flex-direction: row;
+        /* align-items: stretch; */
+    }
+
+    #prevNextButtons button {
+        margin-left: 0rem;
+        padding: 0.25rem;
+        /* width: 10%; */
+
+    }
+
+    .butInfo {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    #content {
+        flex-direction: column;
+        /* Change back to column for smaller screens */
+    }
+
+    #userInfo {
+        width: 100%;
+        /* Take full width on smaller screens */
+        margin-right: 0;
+        align-items: center;
+        justify-content: center;
+        /* Remove margin on smaller screens */
+    }
+
+    #userInfoDetails {
+        margin-top: -1rem;
+    }
+
+    #avatar {
+        width: 8rem;
+        height: 8rem;
+        border-radius: 50%;
+        margin-left: 0.5rem;
+        /* Adjust the size for smaller screens */
+
+        /* margin-right: 0.5rem; */
+    }
+
+    #repoList li {
+        width: 100%;
+        /* margin-left: 2rem; */
+        padding: 0.5rem;
+    }
+
+    #repoList a {
+        /* overflow: hidden; */
+        font-size: 0.95rem;
+    }
+
+    /* Page numbers */
+    .page-numbers-container {
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .page-number {
+        margin: 0px;
+        padding: 0rem;
+    }
+
+    /* Prev, Next, Oldest, Newest buttons */
+    #prevNextButtons {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    #prevNextButtons button {
+        margin-left: 0rem;
+        padding: 0.25rem;
+        /* width: 10%; */
+
+    }
+
+    .butInfo {
+        display: none;
+    }
+
+}
