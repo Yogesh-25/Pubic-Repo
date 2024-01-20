@@ -29,11 +29,11 @@ async function fetchUsers() {
                 Authorization: `Bearer ${token}`,
             },
         });
+        if (!response.ok) {
+            console.error("GitHub API request failed:", response.status, response.statusText);
+            return;
+        }
         const data = await response.json();
-
-        // Log the data to inspect its structure
-        console.log("GitHub API response:", data);
-
         users = data;
         updatePageNumbers();
         fetchAndDisplay();
@@ -41,6 +41,7 @@ async function fetchUsers() {
         console.error("Error fetching GitHub users:", error);
     }
 }
+
 
 // Fetch user details using the GitHub API
 async function fetchUserDetails(username) {
