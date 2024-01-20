@@ -1,7 +1,7 @@
 let currentIndex = 0;
 const usersPerPage = 1; // no of users to display per page
 let users = [];
-const token = "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";
+const token = "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";
 
 // GitHub API endpoint
 // to get GitHub users with public repositories
